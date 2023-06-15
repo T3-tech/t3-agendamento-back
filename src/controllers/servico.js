@@ -15,7 +15,7 @@ module.exports = (app) => {
         servico.adiciona(req.body, res);
     });
 
-    app.patch(`${rota}/:id`, (req, res) => {
+    app.put(`${rota}/:id`, (req, res) => {
         const id = parseInt(req.params.id);
         const valores = req.body;
         servico.altera(id, valores, res);

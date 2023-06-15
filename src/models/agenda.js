@@ -1,19 +1,20 @@
 const conexao = require("../infra/connection");
 
-class Profissional {
-    adiciona(profissional, res) {
-        const sql = "INSERT INTO profissional SET ?";
-        conexao.query(sql, profissional, (erro, resultado) => {
+class Agenda {
+    adiciona(agenda, res) {
+        const sql = "INSERT INTO agenda SET ?";
+        conexao.query(sql, agenda, (erro, resultado) => {
             if (erro) {
                 res.status(400).json(erro);
             } else {
-                res.status(200).json(profissional);
+                res.status(200).json(agenda);
             }
         });
     }
+
     lista(res) {
         const sql =
-            "SELECT P.id, P.nome, S.id as id_servico, S.nome as servico from profissional P INNER JOIN servico S ON P. id_servico = S.id;";
+            "SELECT A.id, A.data, S.nome as nome_servico, P.nome as nome_profissional, A.cliente FROM agenda A INNER JOIN servico S ON A.id_servico = S.id INNER JOIN profissional P ON A.id_profissional = P.id";
         conexao.query(sql, (erro, resultado) => {
             if (erro) {
                 res.status(400).json(erro);
@@ -24,17 +25,18 @@ class Profissional {
     }
 
     buscaPorId(id, res) {
-        const sql = `SELECT P.id, P.nome, S.id as id_servico, S.nome as servico from profissional P INNER JOIN servico S ON P. id_servico = S.id WHERE P.id=${id}`;
+        const sql = `SELECT A.id, A.data, S.nome as nome_servico, P.nome as nome_profissional, A.cliente FROM agenda A INNER JOIN servico S ON A.id_servico = S.id INNER JOIN profissional P ON A.id_profissional = P.id where A.id=${id}`;
         conexao.query(sql, (erro, resultado) => {
             if (erro) {
-                res.status(400).json();
+                res.status(400).json(erro);
             } else {
                 res.status(200).json(resultado);
             }
         });
     }
+
     altera(id, valores, res) {
-        const sql = "UPDATE profissional SET ? WHERE id=?";
+        const sql = "UPDATE agenda SET ? WHERE id=?";
         conexao.query(sql, [valores, id], (erro, resultado) => {
             if (erro) {
                 res.status(400).json(erro);
@@ -43,18 +45,19 @@ class Profissional {
             }
         });
     }
+
     deleta(id, res) {
-        const sql = "DELETE FROM profissional WHERE id=?";
+        const sql = "DELETE FROM agenda WHERE id=?";
         conexao.query(sql, id, (erro, resultado) => {
             if (erro) {
                 res.status(400).json(erro);
             } else {
                 res.status(200).json({
-                    message: "Profissional deletado com sucesso",
+                    message: "Agenda deletado com sucesso",
                 });
             }
         });
     }
 }
 
-module.exports = new Profissional();
+module.exports = new Agenda();

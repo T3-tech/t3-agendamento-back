@@ -29,13 +29,10 @@ class Servico {
         const sql = `SELECT * FROM servico WHERE id=${id}`;
 
         conexao.query(sql, (erro, resultados) => {
-            const servico = resultados[0];
-            if (resultados.length === 0) {
-                res.status(404).json({ message: "Serviço não encontrado" });
-            } else if (erro) {
+            if (erro) {
                 res.status(400).json(erro);
             } else {
-                res.status(200).json(servico);
+                res.status(200).json(resultados);
             }
         });
     }
@@ -47,7 +44,7 @@ class Servico {
             if (erro) {
                 res.status(400).json(erro);
             } else {
-                res.status(200).json({ ...valores, id });
+                this.buscaPorId(id, res);
             }
         });
     }
@@ -59,7 +56,9 @@ class Servico {
             if (erro) {
                 res.status(400).json(erro);
             } else {
-                res.status(200).json({ id });
+                res.status(200).json({
+                    message: "Serviço deletado com sucesso",
+                });
             }
         });
     }
