@@ -54,9 +54,13 @@ class Servico {
 
         conexao.query(sql, id, (erro, resultados) => {
             if (erro) {
-                res.status(400).json(erro);
+                res.status(400).json({
+                    statusCode: 400,
+                    error: erro,
+                });
             } else {
                 res.status(200).json({
+                    statusCode: 200,
                     message: "Serviço deletado com sucesso",
                 });
             }
